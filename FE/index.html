@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Meta tags cho SEO -->
+    <meta name="description" content="Trang web bán đồ điện tử uy tín với đa dạng sản phẩm chất lượng cao" />
+    <meta name="keywords" content="điện tử, smartphone, laptop, tablet, máy tính, công nghệ" />
+    <meta name="author" content="Electronics Store" />
+    
+    <!-- Open Graph tags -->
+    <meta property="og:title" content="Electronics Store - Trang web bán đồ điện tử" />
+    <meta property="og:description" content="Trang web bán đồ điện tử uy tín với đa dạng sản phẩm chất lượng cao" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://your-domain.com" />
+    <meta property="og:image" content="/og-image.jpg" />
+    
+    <!-- Twitter Card tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Electronics Store - Trang web bán đồ điện tử" />
+    <meta name="twitter:description" content="Trang web bán đồ điện tử uy tín với đa dạng sản phẩm chất lượng cao" />
+    <meta name="twitter:image" content="/og-image.jpg" />
+    
+    <!-- Preconnect để tối ưu performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    
+    <title>Electronics Store - Trang web bán đồ điện tử</title>
+  </head>
+  <body>
+    <!-- Loading spinner cho lần đầu load -->
+    <div id="app-loading" class="fixed inset-0 bg-white z-50 flex items-center justify-center">
+      <div class="text-center">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+        <p class="text-gray-600">Đang tải...</p>
+      </div>
+    </div>
+    
+    <!-- Root element cho Vue app -->
+    <div id="app"></div>
+    
+    <!-- Script để ẩn loading spinner -->
+    <script>
+      window.addEventListener('load', function() {
+        const loading = document.getElementById('app-loading');
+        if (loading) {
+          loading.style.opacity = '0';
+          setTimeout(() => {
+            loading.style.display = 'none';
+          }, 300);
+        }
+      });
+    </script>
+    
+    <!-- Vite entry point -->
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html> 
