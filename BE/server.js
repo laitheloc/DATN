@@ -46,7 +46,7 @@ app.use(helmet({
 
 // CORS configuration
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173', // Cho phép frontend truy cập từ URL này
+  origin: process.env.FRONTEND_URL || 'http://localhost:8080', // Cho phép frontend truy cập từ URL này (sửa port từ 5173 thành 8080)
   credentials: true, // Cho phép gửi cookies và authentication headers
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], // Cho phép các HTTP methods này
   allowedHeaders: ['Content-Type', 'Authorization'] // Cho phép các headers này

@@ -5,10 +5,8 @@
         <!-- Logo -->
         <div class="flex items-center">
           <router-link to="/" class="flex items-center space-x-2">
-            <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-              <span class="text-white font-bold text-lg">E</span>
-            </div>
-            <span class="text-xl font-bold text-gray-900">Electronics</span>
+            <img src="/logo.png" alt="Logo" class="w-20 h-20 object-contain" />
+            <span class="text-xl font-bold text-gray-900">Điện Máy Phúc Huế </span>
           </router-link>
         </div>
 

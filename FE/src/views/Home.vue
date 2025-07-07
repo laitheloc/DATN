@@ -1,47 +1,35 @@
 <template>
   <div class="min-h-screen">
     <!-- Hero Section -->
-    <section class="relative bg-gradient-to-r from-blue-600 to-purple-600 text-white">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <h1 class="text-4xl md:text-6xl font-bold mb-6">
-              Khám phá thế giới
-              <span class="text-yellow-300">Điện tử</span>
-            </h1>
-            <p class="text-xl mb-8 text-blue-100">
-              Chuyên cung cấp các sản phẩm điện tử chất lượng cao với giá cả hợp lý. 
-              Trải nghiệm mua sắm tuyệt vời ngay hôm nay!
-            </p>
-            <div class="flex flex-col sm:flex-row gap-4">
-              <router-link 
-                to="/products"
-                class="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-center"
-              >
-                Xem sản phẩm
-              </router-link>
-              <router-link 
-                to="/products?category=featured"
-                class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors text-center"
-              >
-                Sản phẩm nổi bật
-              </router-link>
-            </div>
-          </div>
-          <div class="hidden lg:block">
-            <div class="relative">
-              <div class="w-96 h-96 bg-white bg-opacity-10 rounded-full absolute top-0 left-0"></div>
-              <div class="w-80 h-80 bg-yellow-300 bg-opacity-20 rounded-full absolute bottom-0 right-0"></div>
-              <div class="relative z-10">
-                <img 
-                  src="https://images.unsplash.com/photo-1526738549149-8e07eca6c147?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1025&q=80" 
-                  alt="Electronics" 
-                  class="w-full h-auto rounded-lg shadow-2xl"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
+    <section class="relative bg-transparent">
+      <div class="w-full flex justify-center items-start m-0 p-0">
+        <Carousel 
+          :autoplay="false" 
+          :wrap-around="true" 
+          :mouse-drag="true" 
+          class="w-screen h-[500px] relative"
+          ref="carouselRef"
+          >
+          <template #addons>
+            <button 
+              @click="prev"
+              class="absolute left-4 top-1/2 -translate-y-1/2 bg-white bg-opacity-70 hover:bg-opacity-100 text-blue-600 rounded-full w-12 h-12 flex items-center justify-center shadow-lg z-20"
+              aria-label="Lùi lại"
+            >
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+            </button>
+            <button 
+              @click="next"
+              class="absolute right-4 top-1/2 -translate-y-1/2 bg-white bg-opacity-70 hover:bg-opacity-100 text-blue-600 rounded-full w-12 h-12 flex items-center justify-center shadow-lg z-20"
+              aria-label="Tiếp theo"
+            >
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+            </button>
+          </template>
+          <Slide v-for="(img, idx) in images" :key="idx">
+            <img :src="img" class="object-cover w-full h-[500px]" />
+          </Slide>
+        </Carousel>
       </div>
     </section>
 
@@ -141,6 +129,17 @@
       </div>
     </section>
 
+    <!-- API Test Section (Chỉ hiển thị trong development) -->
+    <section v-if="isDev" class="py-16 bg-yellow-50">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-8">
+          <h2 class="text-2xl font-bold text-gray-900 mb-2">🧪 Test Kết nối API</h2>
+          <p class="text-gray-600">Kiểm tra kết nối giữa Frontend và Backend</p>
+        </div>
+        <ApiTest />
+      </div>
+    </section>
+
     <!-- Why Choose Us -->
     <section class="py-16 bg-gray-50">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -193,6 +192,9 @@ import { useRouter } from 'vue-router'
 import { useCartStore } from '@/stores/cart'
 import { useToast } from 'vue-toastification'
 import { formatCurrency } from '@/utils/format'
+import ApiTest from '@/components/ApiTest.vue'
+import { Carousel, Slide } from 'vue3-carousel'
+import 'vue3-carousel/dist/carousel.css'
 
 const router = useRouter()
 const cartStore = useCartStore()
@@ -201,6 +203,7 @@ const toast = useToast()
 // Reactive data
 const loading = ref(false)
 const featuredProducts = ref([])
+const carouselRef = ref(null)
 
 // Categories data
 const categories = ref([
@@ -233,6 +236,12 @@ const categories = ref([
     icon: 'HeadphonesIcon'
   }
 ])
+
+const images = [
+  'https://images.unsplash.com/photo-1526738549149-8e07eca6c147?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1025&q=80',
+  'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=800&q=80',
+  'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=800&q=80'
+]
 
 // Methods
 const goToCategory = (slug) => {
@@ -299,10 +308,20 @@ const loadFeaturedProducts = async () => {
   }
 }
 
+const next = () => {
+  carouselRef.value && carouselRef.value.next()
+}
+
+const prev = () => {
+  carouselRef.value && carouselRef.value.prev()
+}
+
 // Lifecycle
 onMounted(() => {
   loadFeaturedProducts()
 })
+
+const isDev = import.meta.env.DEV
 </script>
 
 <style scoped>
