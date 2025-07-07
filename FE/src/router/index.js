@@ -3,21 +3,21 @@
  * Định nghĩa các route và navigation guards
  */
 
-import { createRouter, createWebHistory } from 'vue-router'
-import { useAuthStore } from '@/stores/auth'
+import { createRouter, createWebHistory } from 'vue-router' // Import các hàm từ Vue Router
+import { useAuthStore } from '@/stores/auth' // Import Pinia store để quản lý authentication
 
 // Import views (lazy loading)
-const Home = () => import('@/views/Home.vue')
-const Products = () => import('@/views/Products.vue')
-const ProductDetail = () => import('@/views/ProductDetail.vue')
-const Cart = () => import('@/views/Cart.vue')
-const Checkout = () => import('@/views/Checkout.vue')
-const Login = () => import('@/views/auth/Login.vue')
-const Register = () => import('@/views/auth/Register.vue')
-const Profile = () => import('@/views/auth/Profile.vue')
-const Orders = () => import('@/views/Orders.vue')
-const OrderDetail = () => import('@/views/OrderDetail.vue')
-const NotFound = () => import('@/views/NotFound.vue')
+const Home = () => import('@/views/Home.vue') // Lazy load component Home
+const Products = () => import('@/views/Products.vue') // Lazy load component Products
+const ProductDetail = () => import('@/views/ProductDetail.vue') // Lazy load component ProductDetail
+const Cart = () => import('@/views/Cart.vue') // Lazy load component Cart
+const Checkout = () => import('@/views/Checkout.vue') // Lazy load component Checkout
+const Login = () => import('@/views/auth/Login.vue') // Lazy load component Login
+const Register = () => import('@/views/auth/Register.vue') // Lazy load component Register
+const Profile = () => import('@/views/auth/Profile.vue') // Lazy load component Profile
+const Orders = () => import('@/views/Orders.vue') // Lazy load component Orders
+const OrderDetail = () => import('@/views/OrderDetail.vue') // Lazy load component OrderDetail
+const NotFound = () => import('@/views/NotFound.vue') // Lazy load component NotFound
 
 // Route definitions
 const routes = [
@@ -155,26 +155,26 @@ const routes = [
 
 // Create router instance
 const router = createRouter({
-  history: createWebHistory(),
-  routes,
+  history: createWebHistory(), // Sử dụng HTML5 History API
+  routes, // Mảng routes đã định nghĩa
   
   // Scroll behavior
   scrollBehavior(to, from, savedPosition) {
     // Nếu có saved position (back/forward navigation)
     if (savedPosition) {
-      return savedPosition
+      return savedPosition // Trở về vị trí scroll cũ
     }
     
     // Nếu có hash trong URL
     if (to.hash) {
       return {
-        el: to.hash,
-        behavior: 'smooth'
+        el: to.hash, // Element có id trùng với hash
+        behavior: 'smooth' // Scroll mượt mà
       }
     }
     
     // Mặc định scroll to top
-    return { top: 0 }
+    return { top: 0 } // Scroll lên đầu trang
   }
 })
 
@@ -184,64 +184,64 @@ const router = createRouter({
 
 // Global before each guard
 router.beforeEach(async (to, from, next) => {
-  console.log(`🔄 Route change: ${from.path} → ${to.path}`)
+  console.log(`🔄 Route change: ${from.path} → ${to.path}`) // Log thay đổi route
   
   // Update document title
   if (to.meta.title) {
-    document.title = to.meta.title
+    document.title = to.meta.title // Cập nhật tiêu đề trang
   }
   
   // Update meta description
   if (to.meta.description) {
-    const metaDescription = document.querySelector('meta[name="description"]')
+    const metaDescription = document.querySelector('meta[name="description"]') // Tìm meta description
     if (metaDescription) {
-      metaDescription.setAttribute('content', to.meta.description)
+      metaDescription.setAttribute('content', to.meta.description) // Cập nhật nội dung meta description
     }
   }
   
   // Get auth store
-  const authStore = useAuthStore()
+  const authStore = useAuthStore() // Lấy instance của auth store
   
   // Check if route requires authentication
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
-    console.log('🔒 Route requires auth, redirecting to login')
+    console.log('🔒 Route requires auth, redirecting to login') // Log yêu cầu đăng nhập
     next({
-      name: 'Login',
-      query: { redirect: to.fullPath }
+      name: 'Login', // Chuyển hướng đến trang đăng nhập
+      query: { redirect: to.fullPath } // Lưu URL hiện tại để redirect sau khi đăng nhập
     })
     return
   }
   
   // Check if route is guest only (not for authenticated users)
   if (to.meta.guestOnly && authStore.isAuthenticated) {
-    console.log('👤 Guest only route, redirecting to home')
-    next({ name: 'Home' })
+    console.log('👤 Guest only route, redirecting to home') // Log route chỉ cho khách
+    next({ name: 'Home' }) // Chuyển hướng về trang chủ
     return
   }
   
   // Continue navigation
-  next()
+  next() // Cho phép điều hướng tiếp
 })
 
 // Global after each guard
 router.afterEach((to, from) => {
-  console.log(`✅ Route change completed: ${from.path} → ${to.path}`)
+  console.log(`✅ Route change completed: ${from.path} → ${to.path}`) // Log hoàn thành thay đổi route
   
   // Track page view (có thể tích hợp Google Analytics)
   if (typeof gtag !== 'undefined') {
     gtag('config', 'GA_MEASUREMENT_ID', {
-      page_path: to.path
+      page_path: to.path // Gửi page path đến Google Analytics
     })
   }
 })
 
 // Error handling
 router.onError((error) => {
-  console.error('❌ Router error:', error)
+  console.error('❌ Router error:', error) // Log lỗi router
   
   // Redirect to 404 if component fails to load
   if (error.name === 'ChunkLoadFailedError') {
-    router.push({ name: 'NotFound' })
+    router.push({ name: 'NotFound' }) // Chuyển hướng đến trang 404 nếu component load thất bại
   }
 })
 
